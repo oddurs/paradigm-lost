@@ -1,0 +1,20 @@
+/* Inline marks inside authored prose. The custom properties are set by
+   StyleX on the container, so these rules stay theme-aware. */
+.prose code {
+  font-family: var(--prose-mono);
+  font-size: 0.87em;
+  background: var(--prose-code-bg);
+  border: 1px solid var(--prose-code-edge);
+  border-radius: 2px;
+  padding: 0.5px 4px;
+  white-space: nowrap;
+}
+/* a term of art should stay on one line — but not at the cost of
+   pushing the whole page sideways on a small screen */
+@media (max-width: 620px) {
+  .prose code { white-space: normal; overflow-wrap: anywhere; }
+}
+.prose b,
+.prose strong { font-weight: 600; color: var(--prose-strong); }
+.prose i,
+.prose em { font-style: italic; }

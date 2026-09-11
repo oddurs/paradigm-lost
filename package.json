@@ -1,0 +1,54 @@
+{
+  "name": "paradigm-lost",
+  "version": "1.0.0",
+  "private": false,
+  "description": "One problem — total the amounts by department — solved eleven ways between 1935 and 2026, with each paradigm's execution model shown working.",
+  "license": "MIT",
+  "homepage": "https://github.com/oddurs/paradigm-lost#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oddurs/paradigm-lost.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oddurs/paradigm-lost/issues"
+  },
+  "keywords": [
+    "history-of-computing",
+    "programming-paradigms",
+    "punched-cards",
+    "plugboard",
+    "apl",
+    "forth",
+    "prolog",
+    "cobol",
+    "rpg",
+    "nextjs",
+    "stylex",
+    "design-system"
+  ],
+  "scripts": {
+    "dev": "next dev -p 1401",
+    "build": "next build",
+    "start": "next start -p 1401",
+    "typecheck": "tsc --noEmit",
+    "verify": "node scripts/verify.mjs",
+    "check": "npm run typecheck && npm run build && npm run verify"
+  },
+  "dependencies": {
+    "@stylexjs/stylex": "^0.19.0",
+    "next": "16.3.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@stylexswc/nextjs-plugin": "^0.18.6",
+    "@stylexswc/postcss-plugin": "^0.18.6",
+    "@stylexswc/rs-compiler": "^0.18.6",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.5.5",
+    "playwright": "^1.63.0",
+    "typescript": "^5"
+  }
+}

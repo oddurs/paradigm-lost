@@ -1,0 +1,38 @@
+name: A correction
+description: Something on the page is historically wrong
+title: "[correction] "
+labels: [correction]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Corrections are the most valuable thing this repo can receive, especially
+        from anyone who ran the real machines. Period detail matters more here
+        than almost anything else, and the page is only worth reading if it is right.
+  - type: input
+    id: exhibit
+    attributes:
+      label: Which exhibit
+      placeholder: "1935 · IBM 407, or 1964 · RPG II, …"
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What is wrong
+      description: Quote the line or describe the detail.
+    validations:
+      required: true
+  - type: textarea
+    id: right
+    attributes:
+      label: What it should say
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: >
+        A manual, a listing, a book — or your own memory of using it, which
+        counts. Say which, so the footnote can be honest about it.

@@ -1,0 +1,19 @@
+name: Something is broken
+description: A layout, rendering, or behaviour problem
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Browser and viewport width
+      placeholder: "Safari 18, iPhone 13 (390px)"
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
