@@ -5,7 +5,7 @@ import * as stylex from '@stylexjs/stylex';
 import { color, depth, texture } from '@/design/tokens.stylex';
 import { border, radius, space } from '@/design/space.stylex';
 import { font, leading, size, tracking } from '@/design/type.stylex';
-import { Lamp, Plate, Screw } from '@/components/primitives/Parts';
+import { Lamp, Plate, Screw, Vent } from '@/components/primitives/Parts';
 import { PushButton } from '@/components/primitives/PushButton';
 import { Printout } from '@/components/Printout';
 import { StateView } from '@/components/views/StateViews';
@@ -88,20 +88,49 @@ const s = stylex.create({
   tube: {
     position: 'relative',
     borderRadius: radius.bezel,
-    padding: space.md,
+    padding: space.base,
     backgroundColor: color.bakelite,
     backgroundImage: texture.bakelite,
-    boxShadow: `${depth.raised}, inset 0 0 0 1px rgba(0,0,0,0.6)`,
+    /* moulded bezel: a chamfer catching the light, and a deep shoulder */
+    boxShadow: [
+      'inset 0 1px 0 rgba(255,255,255,0.20)',
+      'inset 0 -2px 3px rgba(0,0,0,0.7)',
+      'inset 0 0 0 1px rgba(0,0,0,0.65)',
+      '0 2px 4px rgba(0,0,0,0.35)',
+    ].join(', '),
   },
   glass: {
     position: 'relative',
     minHeight: '232px',
-    borderRadius: '14px / 20px',
+    /* a tube face is a section of a sphere, so the corners pull in hard */
+    borderRadius: '26px / 40px',
     padding: space.lg,
     overflow: 'hidden',
     backgroundColor: color.crt,
-    backgroundImage: `radial-gradient(120% 90% at 50% 42%, rgba(70,150,80,0.14), transparent 72%)`,
-    boxShadow: 'inset 0 0 40px rgba(0,0,0,0.9), inset 0 2px 6px rgba(0,0,0,0.9)',
+    backgroundImage: `radial-gradient(118% 88% at 50% 40%, rgba(70,150,80,0.16), rgba(0,0,0,0) 70%)`,
+    boxShadow: [
+      'inset 0 0 46px rgba(0,0,0,0.92)',
+      'inset 0 2px 6px rgba(0,0,0,0.95)',
+      'inset 0 0 0 1px rgba(255,255,255,0.05)',
+    ].join(', '),
+  },
+  /* the specular highlight lying on the face of the glass */
+  sheen: {
+    position: 'absolute',
+    inset: 0,
+    pointerEvents: 'none',
+    backgroundImage: texture.glassSheen,
+    borderRadius: '26px / 40px',
+  },
+  /* the retrace: the beam flying back up the tube, faint and always there */
+  retrace: {
+    position: 'absolute',
+    insetInline: 0,
+    top: '38%',
+    height: '1px',
+    pointerEvents: 'none',
+    background:
+      'linear-gradient(90deg, rgba(138,240,142,0) 0%, rgba(138,240,142,0.13) 24%, rgba(138,240,142,0.19) 52%, rgba(138,240,142,0) 100%)',
   },
   scan: {
     position: 'absolute',
@@ -115,17 +144,20 @@ const s = stylex.create({
     position: 'absolute',
     inset: 0,
     pointerEvents: 'none',
-    boxShadow: 'inset 0 0 60px 12px rgba(0,0,0,0.85)',
-    borderRadius: '14px / 20px',
+    boxShadow: 'inset 0 0 64px 14px rgba(0,0,0,0.88), inset 0 0 20px 2px rgba(0,0,0,0.5)',
+    borderRadius: '26px / 40px',
   },
   /* the plugboard is a panel, not a tube: no glass, no scanlines */
   panelBay: {
     position: 'relative',
     minHeight: '232px',
     borderRadius: radius.tool,
-    padding: space.md,
+    padding: space.base,
     backgroundColor: color.machineDeep,
-    boxShadow: depth.insetDeep,
+    boxShadow: `${depth.insetDeep}, inset 0 0 0 1px rgba(0,0,0,0.6)`,
+    borderWidth: border.hair,
+    borderStyle: 'solid',
+    borderColor: color.machineEdge,
   },
 
   /* printer stack */
@@ -152,7 +184,33 @@ const s = stylex.create({
     borderBottomColor: '#0A0D0B',
     boxShadow: 'inset 0 -6px 10px -6px rgba(0,0,0,0.9)',
   },
-  paperOut: { flex: '1 1 auto', minWidth: 0, minHeight: 0, display: 'flex', overflow: 'hidden' },
+  paperOut: {
+    position: 'relative',
+    flex: '1 1 auto',
+    minWidth: 0,
+    minHeight: 0,
+    display: 'flex',
+    overflow: 'hidden',
+  },
+  /* the shadow the slot lip casts across paper coming out of it */
+  slotShadow: {
+    position: 'absolute',
+    insetInline: 0,
+    top: 0,
+    height: '22px',
+    zIndex: 1,
+    pointerEvents: 'none',
+    background: 'linear-gradient(180deg, rgba(0,0,0,0.42), rgba(0,0,0,0.14) 45%, rgba(0,0,0,0) 100%)',
+  },
+  /* a cooling grille along the foot of the console */
+  footer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: space.sm,
+    marginTop: space.xs,
+  },
+  grille: { display: 'block', flex: '1 1 60px', minWidth: '40px' },
 });
 
 const REST = 'At rest. This console shows what the paradigm actually does between the source and the report.';
@@ -259,8 +317,10 @@ export function MachineStrip({ steps, isBoard }: { steps: Step[]; isBoard: boole
           <div {...stylex.props(s.tube)}>
             <div {...stylex.props(s.glass)}>
               <StateView st={current.st} />
+              <span aria-hidden {...stylex.props(s.retrace)} />
               <span aria-hidden {...stylex.props(s.scan)} />
               <span aria-hidden {...stylex.props(s.vignette)} />
+              <span aria-hidden {...stylex.props(s.sheen)} />
             </div>
           </div>
         )}
@@ -271,10 +331,22 @@ export function MachineStrip({ steps, isBoard }: { steps: Step[]; isBoard: boole
             <Lamp lit={printed.length > 0} hue="green" />
           </div>
           <div {...stylex.props(s.paperOut)}>
+            <span aria-hidden {...stylex.props(s.slotShadow)} />
             <Printout lines={printed} />
           </div>
         </div>
       </div>
+
+      <div {...stylex.props(s.footer)}>
+        <Plate s="micro">Console</Plate>
+        <span {...stylex.props(s.grille)}>
+          <Vent />
+        </span>
+        <Plate s="micro">{isBoard ? 'Panel bay' : 'Display bay'}</Plate>
+      </div>
+
+      <Screw at="bl" i={1} />
+      <Screw at="br" i={3} />
     </div>
   );
 }

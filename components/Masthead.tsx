@@ -3,7 +3,7 @@ import { color, depth, texture } from '@/design/tokens.stylex';
 import { border, radius, space } from '@/design/space.stylex';
 import { font, leading, size, tracking, weight } from '@/design/type.stylex';
 import { Wrap } from '@/components/primitives/Layout';
-import { Lamp, Screw, Vent } from '@/components/primitives/Parts';
+import { Lamp, RivetRow, Screw, Vent } from '@/components/primitives/Parts';
 import { EXHIBITS } from '@/data/exhibits';
 
 /**
@@ -139,6 +139,7 @@ export function Masthead() {
               <Vent />
             </div>
           </div>
+          <RivetRow />
         </Wrap>
       </div>
 

@@ -43,6 +43,13 @@ These cost real time to rediscover.
   with a misleading "theme file" error.
 - **Token files must end in `.stylex.ts`.** `defineVars` in any other filename
   fails to compile.
+- **After editing a `.stylex.ts` file, restart `next dev` with the cache cleared**
+  (`rm -rf .next && npm run dev`). Turbopack's incremental cache and the PostCSS
+  extraction step can fall out of step, and the page then renders with the
+  affected custom properties simply *undefined* — which is quiet and misleading,
+  because `background-color` falls back to transparent and `border-color` falls
+  back to `currentColor`, so a panel looks unstyled rather than broken. Verify
+  anything surprising against `npm run build` before believing it.
 - **`stylex.props()` takes created styles only.** No inline object literals —
   add a named style to the `stylex.create` block instead.
 - **Never mix a shorthand with its longhands** in one style object (`border`
@@ -84,6 +91,14 @@ Four rules hold the look together:
    machine said.
 4. **Small radii.** Pressed steel and phenolic mouldings have a tool radius of a
    millimetre or two. No `rounded-lg` anywhere.
+5. **Nothing is a flat fill.** Every surface takes a `texture` token, and every
+   part that is a separate piece of hardware reads as one: a `Seam` between
+   panels, a `RivetRow` along an edge, a countersink under a `Screw`. A part
+   drawn as a plain rectangle will look pasted on.
+
+Parts that are pressed out of sheet (`Vent`, `RivetRow`, `Seam`) must set
+`display: block` — they render as `<span>`, and collapse to nothing when they
+are not a flex item.
 
 ## The honesty rule
 

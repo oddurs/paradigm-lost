@@ -32,7 +32,9 @@ const btn = stylex.create({
     opacity: { default: 1, ':disabled': 0.42 },
   },
   cap: {
+    position: 'relative',
     display: 'block',
+    overflow: 'hidden',
     paddingBlock: space.sm,
     paddingInline: { default: space.md, '@media (max-width: 480px)': space.sm },
     borderRadius: '2px',
@@ -48,6 +50,16 @@ const btn = stylex.create({
     textShadow: '0 -1px 0 rgba(0,0,0,0.7)',
     transitionProperty: 'color, background, text-shadow',
     transitionDuration: motion.lamp,
+    /* the gloss sitting on the top half of the moulding */
+    '::after': {
+      content: '""',
+      position: 'absolute',
+      insetInline: 0,
+      top: 0,
+      height: '46%',
+      background: 'linear-gradient(180deg, rgba(255,255,255,0.17), rgba(255,255,255,0))',
+      pointerEvents: 'none',
+    },
   },
   /* lit from behind: the legend glows, the cap warms */
   litRed: {

@@ -14,7 +14,9 @@ const screw = stylex.create({
     height: '11px',
     borderRadius: radius.lamp,
     background: `radial-gradient(circle at 34% 30%, ${color.steelHi}, ${color.steel} 46%, ${color.steelLo} 100%)`,
-    boxShadow: 'inset 0 -1px 1px rgba(0,0,0,0.45), 0 1px 1px rgba(0,0,0,0.4)',
+    /* the head, then the countersunk recess it is pulled down into */
+    boxShadow:
+      'inset 0 -1px 1px rgba(0,0,0,0.45), inset 0 1px 1px rgba(255,255,255,0.35), 0 1px 1px rgba(0,0,0,0.45), 0 0 0 1px rgba(0,0,0,0.34), 0 0 3px 1px rgba(0,0,0,0.28)',
     pointerEvents: 'none',
   },
   slot: {
@@ -145,22 +147,130 @@ export function Lamp({ lit, hue = 'red' }: { lit: boolean; hue?: 'red' | 'amber'
  * ------------------------------------------------------------------ */
 const vent = stylex.create({
   base: {
-    height: '26px',
+    display: 'block',
+    position: 'relative',
+    height: '30px',
     flex: '1 1 auto',
     minWidth: '60px',
     borderRadius: radius.tool,
-    background: `repeating-linear-gradient(180deg,
-      ${color.machineDeep} 0 2px,
-      ${color.machineLo} 2px 3px,
-      ${color.machineHi} 3px 4px,
-      ${color.machine} 4px 7px)`,
-    boxShadow: depth.inset,
-    opacity: 0.75,
+    backgroundColor: color.machineDeep,
+    backgroundImage: texture.grille,
+    boxShadow: depth.insetDeep,
+    borderWidth: border.hair,
+    borderStyle: 'solid',
+    borderColor: color.machineEdge,
+    /* the pressed lip around the cut-out */
+    '::after': {
+      content: '""',
+      position: 'absolute',
+      inset: '-1px',
+      borderRadius: radius.tool,
+      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.16), inset 0 -1px 0 rgba(0,0,0,0.5)',
+      pointerEvents: 'none',
+    },
   },
 });
 
 export function Vent() {
   return <span aria-hidden {...stylex.props(vent.base)} />;
+}
+
+/* ------------------------------------------------------------------ *
+ * RivetRow — domed rivet heads at a regular pitch, the way sheet metal
+ * is actually fastened along a run rather than only at the corners.
+ * ------------------------------------------------------------------ */
+const rivet = stylex.create({
+  row: {
+    display: 'block',
+    height: '9px',
+    width: '100%',
+    backgroundImage: texture.rivets,
+    backgroundSize: '34px 9px',
+    backgroundRepeat: 'repeat-x',
+    backgroundPosition: 'center',
+    opacity: 0.72,
+    pointerEvents: 'none',
+  },
+  dense: { backgroundSize: '22px 9px' },
+});
+
+export function RivetRow({ dense = false }: { dense?: boolean }) {
+  return <span aria-hidden {...stylex.props(rivet.row, dense && rivet.dense)} />;
+}
+
+/* ------------------------------------------------------------------ *
+ * Seam — the gap where one cabinet panel is bolted against the next.
+ * A machine this size was never pressed from a single sheet.
+ * ------------------------------------------------------------------ */
+const seam = stylex.create({
+  base: {
+    display: 'block',
+    height: '10px',
+    width: '100%',
+    backgroundImage: texture.seam,
+    pointerEvents: 'none',
+  },
+  riveted: {
+    display: 'flex',
+    alignItems: 'center',
+    height: '14px',
+  },
+});
+
+export function Seam({ riveted = false }: { riveted?: boolean }) {
+  if (!riveted) return <span aria-hidden {...stylex.props(seam.base)} />;
+  return (
+    <span aria-hidden {...stylex.props(seam.base, seam.riveted)}>
+      <RivetRow />
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * DataPlate — the etched tag riveted to every machine, carrying the
+ * things a service engineer needed and nobody else ever read.
+ * ------------------------------------------------------------------ */
+const dataPlate = stylex.create({
+  base: {
+    position: 'relative',
+    display: 'inline-grid',
+    gap: '2px',
+    maxWidth: '100%',
+    paddingBlock: space.md,
+    paddingInline: { default: space.xl, '@media (max-width: 560px)': space.base },
+    borderRadius: '1px',
+    backgroundColor: color.steel,
+    backgroundImage: texture.brushed,
+    boxShadow: `${depth.raised}, inset 0 0 0 1px rgba(0,0,0,0.28)`,
+    borderWidth: border.hair,
+    borderStyle: 'solid',
+    borderColor: color.machineEdge,
+  },
+  line: {
+    fontFamily: font.mono,
+    fontSize: size.xs,
+    letterSpacing: tracking.plateTight,
+    textTransform: 'uppercase',
+    color: color.machineEdge,
+    textShadow: '0 1px 0 rgba(255,255,255,0.30)',
+    /* an etched plate does not wrap, but the page must not scroll sideways */
+    whiteSpace: { default: 'nowrap', '@media (max-width: 560px)': 'normal' },
+    overflowWrap: 'anywhere',
+  },
+});
+
+export function DataPlate({ lines }: { lines: string[] }) {
+  return (
+    <span {...stylex.props(dataPlate.base)}>
+      <Screw at="tl" i={2} />
+      <Screw at="br" i={0} />
+      {lines.map((l) => (
+        <span key={l} {...stylex.props(dataPlate.line)}>
+          {l}
+        </span>
+      ))}
+    </span>
+  );
 }
 
 /* ------------------------------------------------------------------ *

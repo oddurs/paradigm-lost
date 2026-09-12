@@ -85,7 +85,8 @@ const sheet = stylex.create({
     backgroundColor: color.paper,
     backgroundImage: texture.paper,
     color: color.ink,
-    boxShadow: depth.sheet,
+    /* the last layer is the cut edge of the stock itself */
+    boxShadow: `${depth.sheet}, inset 0 -1px 0 rgba(0,0,0,0.07)`,
     borderRadius: '1px',
     borderTopWidth: border.hair,
     borderTopStyle: 'solid',
@@ -94,17 +95,32 @@ const sheet = stylex.create({
   padded: { padding: { default: space.xl, '@media (max-width: 480px)': space.base } },
   tight: { padding: { default: space.lg, '@media (max-width: 480px)': space.base } },
   flush: { padding: 0 },
-  /* the faint punched-hole margin of a filing sheet */
+  /* filed: three punched holes down the left margin, and the red rule
+     the binder prints beside them */
   filed: {
+    paddingLeft: space.section,
     '::before': {
       content: '""',
       position: 'absolute',
-      left: space.md,
+      left: '18px',
+      top: '12%',
+      bottom: '12%',
+      width: '11px',
+      backgroundImage: `radial-gradient(circle 5.5px at 50% 50%, ${color.paperEdge} 0 94%, rgba(0,0,0,0) 96%)`,
+      backgroundSize: '11px 33.33%',
+      backgroundRepeat: 'repeat-y',
+      boxShadow: 'none',
+      opacity: 0.85,
+    },
+    '::after': {
+      content: '""',
+      position: 'absolute',
+      left: '44px',
       top: 0,
       bottom: 0,
       width: '1px',
       background: color.marker,
-      opacity: 0.28,
+      opacity: 0.26,
     },
   },
 });
