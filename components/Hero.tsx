@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { color } from '@/design/tokens.stylex';
+import { color, depth } from '@/design/tokens.stylex';
 import { measure, space } from '@/design/space.stylex';
 import { font, leading, size, tracking, weight } from '@/design/type.stylex';
 import { Wrap } from '@/components/primitives/Layout';
@@ -30,6 +30,7 @@ const s = stylex.create({
     maxWidth: '15ch',
     marginBottom: space.lg,
     color: color.ink,
+    textShadow: depth.letterpress,
   },
   thin: {
     fontStyle: 'italic',

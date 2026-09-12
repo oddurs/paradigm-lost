@@ -4,19 +4,14 @@ import { border, measure, radius, space } from '@/design/space.stylex';
 import { font, leading, size, tracking, weight } from '@/design/type.stylex';
 import { Wrap } from '@/components/primitives/Layout';
 import { Sheet } from '@/components/primitives/Surfaces';
-import { Screw } from '@/components/primitives/Parts';
+import { Screw, Seam } from '@/components/primitives/Parts';
 import { Listing } from '@/components/Listing';
 import { MachineStrip } from '@/components/MachineStrip';
 import type { Exhibit as ExhibitData } from '@/data/types';
 
 const s = stylex.create({
-  band: {
-    paddingBlock: space.section,
-    borderTopWidth: border.hair,
-    borderTopStyle: 'solid',
-    borderTopColor: color.machineEdge,
-    scrollMarginTop: space.base,
-  },
+  panel: { scrollMarginTop: space.base },
+  band: { paddingBlock: space.section },
   head: {
     display: 'grid',
     gridTemplateColumns: { default: '132px minmax(0, 1fr)', '@media (max-width: 760px)': 'minmax(0, 1fr)' },
@@ -156,50 +151,51 @@ export function Exhibit({ data, ordinal, of }: { data: ExhibitData; ordinal: num
   const notesProps = stylex.props(s.notes);
 
   return (
-    <Wrap as="section" id={data.id} style={s.band}>
-      <div {...stylex.props(s.head)}>
-        <div {...stylex.props(s.yearPlate)}>
-          <Screw at="tl" i={ordinal} />
-          <Screw at="br" i={ordinal + 1} />
-          <span {...stylex.props(s.year)}>{data.year}</span>
-          <span {...stylex.props(s.ordinal)}>
-            Exhibit {String(ordinal).padStart(2, '0')}/{of}
-          </span>
-        </div>
-
-        <div>
-          <h2 {...stylex.props(s.h2)}>{data.title}</h2>
-          <div {...stylex.props(s.who)}>{data.who}</div>
-          <p {...stylex.props(s.claim)}>{data.claim}</p>
-        </div>
-      </div>
-
-      <div {...stylex.props(s.body)}>
-        <Listing code={data.code} lang={data.lang} executes={data.executes} />
-
-        <Sheet pad="tight">
-          <div className={`prose ${notesProps.className ?? ''}`} style={notesProps.style}>
-            {data.notes.map((n, i) => (
-              <p key={i} {...stylex.props(s.note)} dangerouslySetInnerHTML={{ __html: n }} />
-            ))}
-
-            <div {...stylex.props(s.ledger)}>
-              {data.costs.map((c) => (
-                <div key={c.kind} {...stylex.props(s.entry)}>
-                  <span
-                    {...stylex.props(s.tag, c.kind === 'free' ? s.tagFree : s.tagCostly)}
-                  >
-                    {c.kind === 'free' ? 'Free' : 'Costly'}
-                  </span>
-                  <span>{c.text}</span>
-                </div>
-              ))}
-            </div>
+    <section id={data.id} {...stylex.props(s.panel)}>
+      <Seam riveted />
+      <Wrap style={s.band}>
+        <div {...stylex.props(s.head)}>
+          <div {...stylex.props(s.yearPlate)}>
+            <Screw at="tl" i={ordinal} />
+            <Screw at="br" i={ordinal + 1} />
+            <span {...stylex.props(s.year)}>{data.year}</span>
+            <span {...stylex.props(s.ordinal)}>
+              Exhibit {String(ordinal).padStart(2, '0')}/{of}
+            </span>
           </div>
-        </Sheet>
-      </div>
 
-      <MachineStrip steps={steps} isBoard={data.id === 'plugboard'} />
-    </Wrap>
+          <div>
+            <h2 {...stylex.props(s.h2)}>{data.title}</h2>
+            <div {...stylex.props(s.who)}>{data.who}</div>
+            <p {...stylex.props(s.claim)}>{data.claim}</p>
+          </div>
+        </div>
+
+        <div {...stylex.props(s.body)}>
+          <Listing code={data.code} lang={data.lang} executes={data.executes} />
+
+          <Sheet pad="tight">
+            <div className={`prose ${notesProps.className ?? ''}`} style={notesProps.style}>
+              {data.notes.map((n, i) => (
+                <p key={i} {...stylex.props(s.note)} dangerouslySetInnerHTML={{ __html: n }} />
+              ))}
+
+              <div {...stylex.props(s.ledger)}>
+                {data.costs.map((c) => (
+                  <div key={c.kind} {...stylex.props(s.entry)}>
+                    <span {...stylex.props(s.tag, c.kind === 'free' ? s.tagFree : s.tagCostly)}>
+                      {c.kind === 'free' ? 'Free' : 'Costly'}
+                    </span>
+                    <span>{c.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Sheet>
+        </div>
+
+        <MachineStrip steps={steps} isBoard={data.id === 'plugboard'} />
+      </Wrap>
+    </section>
   );
 }

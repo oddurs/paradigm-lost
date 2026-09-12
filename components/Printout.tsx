@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { color, depth } from '@/design/tokens.stylex';
+import { color, depth, texture } from '@/design/tokens.stylex';
 import { border, space } from '@/design/space.stylex';
 import { font, size, tracking } from '@/design/type.stylex';
 import type { PrintLine } from '@/data/types';
@@ -25,11 +25,30 @@ const s = stylex.create({
     minWidth: 0,
     backgroundColor: color.barPale,
     boxShadow: depth.sheet,
-    borderTopWidth: border.hair,
-    borderTopStyle: 'dashed',
-    borderTopColor: color.barEdge,
     overflow: 'hidden',
   },
+  /* every fanfold panel is bounded by a perforation, and the paper
+     remembers the fold long after it has been torn off the stack */
+  fold: {
+    position: 'absolute',
+    insetInline: 0,
+    height: '6px',
+    zIndex: 2,
+    pointerEvents: 'none',
+    backgroundImage: texture.crease,
+  },
+  foldTop: { top: 0 },
+  foldBottom: { bottom: 0, transform: 'scaleY(-1)' },
+  perf: {
+    position: 'absolute',
+    insetInline: 0,
+    height: '1px',
+    zIndex: 3,
+    pointerEvents: 'none',
+    backgroundImage: `repeating-linear-gradient(90deg, ${color.barEdge} 0 3px, rgba(0,0,0,0) 3px 7px)`,
+  },
+  perfTop: { top: '1px' },
+  perfBottom: { bottom: '1px' },
   sprocket: {
     flex: '0 0 22px',
     backgroundColor: color.barPale,
@@ -70,6 +89,7 @@ const s = stylex.create({
     whiteSpace: 'pre',
     color: color.ink,
     fontVariantNumeric: 'tabular-nums',
+    textShadow: depth.struck,
     minHeight: `${LINE * 7}px`,
   },
   grand: {
@@ -93,6 +113,10 @@ const s = stylex.create({
 export function Printout({ lines }: { lines: PrintLine[] }) {
   return (
     <div {...stylex.props(s.frame)}>
+      <span aria-hidden {...stylex.props(s.fold, s.foldTop)} />
+      <span aria-hidden {...stylex.props(s.perf, s.perfTop)} />
+      <span aria-hidden {...stylex.props(s.fold, s.foldBottom)} />
+      <span aria-hidden {...stylex.props(s.perf, s.perfBottom)} />
       <div aria-hidden {...stylex.props(s.sprocket, s.perfLeft)} />
       <div {...stylex.props(s.field)}>
         <pre {...stylex.props(s.pre)} aria-live="polite" aria-label="Printer output">

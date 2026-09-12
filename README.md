@@ -12,7 +12,7 @@
 
 </div>
 
-![The opening of the essay](docs/hero.png)
+![The opening of the essay](docs/hero.jpg)
 
 ## The argument
 
@@ -49,7 +49,7 @@ There is no source listing, because there is no source. The behaviour of the
 machine *is* the set of cords in the panel. Watch the comparing exit fire on a
 change of department and start a minor program step.
 
-![The 407 control panel, cords carrying an impulse](docs/plugboard.png)
+![The 407 control panel, cords carrying an impulse](docs/plugboard.jpg)
 
 ### 1966 · APL, where the grouping is a matrix
 
@@ -58,7 +58,7 @@ matrix, and the inner product totals it. Grouping and summing turn out to be the
 same operation as linear algebra. The matrix builds a column at a time, and no
 amount has been added to anything until it is complete.
 
-![The APL boolean membership matrix building column by column](docs/apl.png)
+![The APL boolean membership matrix building column by column](docs/apl.jpg)
 
 ### 1970 · Forth, which genuinely executes
 
@@ -67,7 +67,7 @@ definition to a flat instruction array with resolved branch targets and advances
 one instruction per step, so the data stack can be watched filling and draining a
 word at a time.
 
-![The Forth data stack mid-execution](docs/forth.png)
+![The Forth data stack mid-execution](docs/forth.jpg)
 
 ### The input to all eleven
 
@@ -75,11 +75,11 @@ Twelve 80-column cards, punched with real Hollerith zone/digit encoding — the
 holes say what the cards say. The staff are the people whose paradigms appear in
 the exhibits.
 
-![The deck of twelve punched cards](docs/deck.png)
+![The deck of twelve punched cards](docs/deck.jpg)
 
 ### Both themes
 
-![An exhibit in the dark theme](docs/dark.png)
+![An exhibit in the dark theme](docs/dark.jpg)
 
 ## The eleven
 
@@ -148,13 +148,22 @@ every manufacturer used on cabinets between roughly 1955 and 1975, bond paper,
 fanfold greenbar, manila card stock, bakelite, brushed steel, brass, phosphor.
 Every colour is a thing you could have touched.
 
+Nothing on the page is a flat fill. `texture` tokens carry the sandblasted
+finish on the enamel, the fibre in the paper, the directional grain in brushed
+steel, the louvres in a grille, the rivet pitch along a seam, the specular sheen
+on the face of a tube, and the crease across a sheet of fanfold. The page is
+built as *panels* rather than one surface: each exhibit is bolted to the one
+above it with a riveted seam, and the room light falls off as you go down the
+cabinet.
+
 ## Layout
 
 ```
 app/            layout, page, resets, the @stylex directive, the OG card
 design/         tokens
 components/
-  primitives/   Panel, Sheet, PushButton, Screw, Lamp, Plate, Vent, Layout
+  primitives/   Panel, Sheet, PushButton, Screw, Rivet, Seam, Lamp,
+                Plate, DataPlate, Vent, Rule, Badge, Layout
   views/        one per execution model — Plugboard, plus six CRT views
   Masthead, Hero, DeckSection, PunchCard, Listing, Printout,
   MachineStrip (the only client component), Exhibit, Essay

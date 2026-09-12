@@ -9,7 +9,8 @@ import { Plugboard } from './Plugboard';
 /* Everything here is drawn on the tube, in phosphor, except the plugboard —
    which is a physical panel and gets to stay one. */
 
-const GLOW = '0 0 6px rgba(138,240,142,0.45)';
+const GLOW =
+  '0 0 4px rgba(138,240,142,0.55), 0 0 11px rgba(138,240,142,0.30), 0 0 22px rgba(138,240,142,0.13)';
 
 const s = stylex.create({
   mono: {

@@ -4,15 +4,10 @@ import { border, measure, radius, space } from '@/design/space.stylex';
 import { font, leading, size, tracking, weight } from '@/design/type.stylex';
 import { Wrap } from '@/components/primitives/Layout';
 import { Sheet } from '@/components/primitives/Surfaces';
-import { Plate, Rule, Screw } from '@/components/primitives/Parts';
+import { DataPlate, Plate, Rule, Screw, Seam } from '@/components/primitives/Parts';
 
 const s = stylex.create({
-  band: {
-    paddingBlock: space.section,
-    borderTopWidth: border.hair,
-    borderTopStyle: 'solid',
-    borderTopColor: color.machineEdge,
-  },
+  band: { paddingBlock: space.section },
 
   /* ---- the rhyme: an equivalence placard bolted to the machine ---- */
   placard: {
@@ -89,6 +84,7 @@ const s = stylex.create({
     maxWidth: '20ch',
     marginBottom: space.lg,
     color: color.ink,
+    textShadow: depth.letterpress,
   },
   kicker: {
     marginTop: space.xl,
@@ -128,11 +124,14 @@ const s = stylex.create({
     maxWidth: '70ch',
   },
   footStrong: { opacity: 1, color: color.lampAmber },
+  footPlate: { marginTop: space.xl, display: 'flex' },
 });
 
 export function Rhyme() {
   return (
-    <Wrap as="section" style={s.band} id="rhyme">
+    <section id="rhyme">
+      <Seam riveted />
+      <Wrap style={s.band}>
       <div {...stylex.props(s.placard)}>
         <Screw at="tl" i={0} />
         <Screw at="tr" i={2} />
@@ -187,14 +186,17 @@ export function Rhyme() {
           the sort and the break out longhand, because the machines of that era had learned to be
           general and forgotten how to be specific.
         </p>
-      </div>
-    </Wrap>
+        </div>
+      </Wrap>
+    </section>
   );
 }
 
 export function Closing() {
   return (
-    <Wrap as="section" style={s.band} id="closing">
+    <section id="closing">
+      <Seam riveted />
+      <Wrap style={s.band}>
       <Sheet style={s.closeSheet}>
         <h2 {...stylex.props(s.h2)}>We did not go from imperative to declarative</h2>
 
@@ -225,8 +227,9 @@ export function Closing() {
           The control break was never lost, exactly. It was just, for a while, something you had to
           remember to do.
         </p>
-      </Sheet>
-    </Wrap>
+        </Sheet>
+      </Wrap>
+    </section>
   );
 }
 
@@ -252,6 +255,16 @@ export function Colophon() {
             <br />
             Corrections welcome, especially from anyone who ran the real thing.
           </p>
+        </div>
+
+        <div {...stylex.props(s.footPlate)}>
+          <DataPlate
+            lines={[
+              'Paradigm Lost · model 1935—2026',
+              'ser. no. 1401-0011 · 11 exhibits · 1 interpreter',
+              'total by department · deck presorted on cols 11-18',
+            ]}
+          />
         </div>
       </Wrap>
     </footer>

@@ -39,9 +39,11 @@ const s = stylex.create({
     /* the cut corner, top left */
     clipPath: 'polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px)',
     transitionProperty: 'transform, box-shadow',
-    transitionDuration: '120ms',
-    transform: { default: 'translateY(0)', ':hover': 'translateY(-3px)' },
+    transitionDuration: '140ms',
+    transform: { default: 'translateY(0)', ':hover': 'translateY(-4px)' },
   },
+  /* the tilt lives on a wrapper so the hover lift can compose with it */
+  lie: { display: 'block', transitionProperty: 'transform', transitionDuration: '140ms' },
   caption: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -58,12 +60,18 @@ const s = stylex.create({
   svg: { width: '100%', height: 'auto', display: 'block' },
 });
 
-export function PunchCard({ card }: { card: Card }) {
+/* a deterministic wobble, so a stack of these reads as handled rather than
+   laid out: no two cards in a real deck sit at quite the same angle */
+const LIE = [-0.7, 0.45, -0.25, 0.8, -0.5, 0.2, 0.62, -0.85, 0.3, -0.4, 0.55, -0.15];
+
+export function PunchCard({ card, index = 0 }: { card: Card; index?: number }) {
+  const tilt = LIE[index % LIE.length];
   const columns = cardColumns(card);
   const interpretation =
     pad(card.name, 11) + pad(DEPTS[card.dept], 9) + rpad(String(card.cents), 6);
 
   return (
+    <div {...stylex.props(s.lie)} style={{ transform: `rotate(${tilt}deg)` }}>
     <div {...stylex.props(s.root)}>
       <svg
         viewBox="0 0 204 92"
@@ -136,6 +144,7 @@ export function PunchCard({ card }: { card: Card }) {
         </span>
         <span>{money(card.cents)}</span>
       </div>
+    </div>
     </div>
   );
 }

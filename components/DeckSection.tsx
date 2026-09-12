@@ -71,8 +71,8 @@ export function DeckSection() {
       </p>
 
       <div {...stylex.props(s.grid)}>
-        {DECK.map((card) => (
-          <PunchCard key={card.name} card={card} />
+        {DECK.map((card, i) => (
+          <PunchCard key={card.name} card={card} index={i} />
         ))}
       </div>
 

@@ -74,7 +74,8 @@ const styles = stylex.create({
   body: {
     minHeight: '100dvh',
     backgroundColor: color.machine,
-    backgroundImage: texture.enamel,
+    /* the room light comes from above, so the cabinet is brighter at the top */
+    backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0) 22%, rgba(0,0,0,0.05) 70%, rgba(0,0,0,0.13)), ${texture.enamel}`,
     backgroundAttachment: 'fixed',
     color: color.ink,
     fontFamily: font.display,
